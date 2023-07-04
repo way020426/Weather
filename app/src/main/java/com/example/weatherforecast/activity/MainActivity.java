@@ -4,6 +4,9 @@ package com.example.weatherforecast.activity;
 import android.annotation.*;
 import android.content.*;
 import android.os.*;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -104,6 +107,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        // 在适当的地方，比如onCreate()中
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // 文本改变之前被调用，这里不需要做任何操作
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 文本改变时被调用，这里不需要做任何操作
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 文本改变后被调用
+                updateStarButton();
+            }
+        });
+
 
     }
 
@@ -264,10 +286,12 @@ public class MainActivity extends AppCompatActivity {
 
             // 创建新的Button
             Button button = new Button(this);
-            // 设置按钮的文字为城市名
-            button.setText(city);
+            // 检查城市名的长度并截取
+            String buttonText = city.length() > 3 ? city.substring(0, 3) + "..." : city;
+            // 设置按钮的文字为城市名或截取后的字符串
+            button.setText(buttonText);
             // 设置按钮的宽度和权重
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(250, LinearLayout.LayoutParams.WRAP_CONTENT);
             button.setLayoutParams(lp);
             // 设置按钮的点击事件
             button.setOnClickListener(new View.OnClickListener() {
